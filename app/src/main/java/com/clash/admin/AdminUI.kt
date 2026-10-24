@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
 import android.widget.Toast
 import androidx.compose.animation.core.LinearEasing
@@ -105,7 +106,14 @@ fun Context.toast(s: String) = Toast.makeText(this, s, Toast.LENGTH_SHORT).show(
 
 @Composable
 fun <T> rflow(vararg k: Any?, init: T, f: () -> Flow<T>): State<T> {
-    val fl = remember(k.toList()) { f() }
+    val fl = remember(k.toList()) {
+        try {
+            f()
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            flowOf(init)
+        }
+    }
     return fl.collectAsState(init)
 }
 

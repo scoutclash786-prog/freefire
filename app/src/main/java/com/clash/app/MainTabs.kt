@@ -86,11 +86,19 @@ fun BannerPager(list: List<Banner>, nav: NavController, height: Int = 170) {
     val open = linkOpener(nav)
     val state = rememberPagerState(pageCount = { list.size })
     LaunchedEffect(list.size) {
-        while (true) { delay(3500); if (list.size > 1) state.animateScrollToPage((state.currentPage + 1) % list.size) }
+        while (true) {
+            delay(3500)
+            try {
+                if (list.size > 1 && state.pageCount > 1) {
+                    state.animateScrollToPage((state.currentPage + 1) % state.pageCount)
+                }
+            } catch (_: Throwable) { }
+        }
     }
     HorizontalPager(state, Modifier.fillMaxWidth(), pageSpacing = 10.dp) { p ->
-        AsyncImage(list[p].image, null, Modifier.fillMaxWidth().height(height.dp).clip(RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFF3B2A99), RoundedCornerShape(12.dp)).clickable { open(list[p].link) }, contentScale = ContentScale.Crop)
+        val item = list.getOrNull(p) ?: return@HorizontalPager
+        AsyncImage(item.image, null, Modifier.fillMaxWidth().height(height.dp).clip(RoundedCornerShape(12.dp))
+            .border(1.dp, Color(0xFF3B2A99), RoundedCornerShape(12.dp)).clickable { open(item.link) }, contentScale = ContentScale.Crop)
     }
 }
 

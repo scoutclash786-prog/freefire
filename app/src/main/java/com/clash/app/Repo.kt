@@ -24,26 +24,53 @@ import kotlin.coroutines.resume
 object Repo {
     val auth: FirebaseAuth get() = try {
         FirebaseAuth.getInstance()
-    } catch (_: Exception) {
-        val app = com.google.firebase.FirebaseApp.getInstance()
+    } catch (_: Throwable) {
+        val app = com.clash.app.ClashApp.instance?.let { com.clash.app.initFirebase(it) }
+            ?: com.google.firebase.FirebaseApp.getInstance()
         FirebaseAuth.getInstance(app)
     }
-    val db: DatabaseReference get() = try {
-        FirebaseDatabase.getInstance().reference
-    } catch (_: Exception) {
-        val app = com.google.firebase.FirebaseApp.getInstance()
-        FirebaseDatabase.getInstance(app).reference
-    }
-    fun uid() = try { auth.currentUser?.uid ?: "" } catch (_: Exception) { "" }
 
-    private fun <T> watch(q: Query, parse: (DataSnapshot) -> T): Flow<T> = callbackFlow {
-        val l = object : ValueEventListener {
-            override fun onDataChange(s: DataSnapshot) { trySend(parse(s)) }
-            override fun onCancelled(e: DatabaseError) { close(e.toException()) }
+    val db: DatabaseReference get() = try {
+        FirebaseDatabase.getInstance("https://paynal-18aa1-default-rtdb.firebaseio.com").reference
+    } catch (_: Throwable) {
+        try {
+            val app = com.clash.app.ClashApp.instance?.let { com.clash.app.initFirebase(it) }
+                ?: com.google.firebase.FirebaseApp.getInstance()
+            FirebaseDatabase.getInstance(app, "https://paynal-18aa1-default-rtdb.firebaseio.com").reference
+        } catch (_: Throwable) {
+            try {
+                FirebaseDatabase.getInstance().reference
+            } catch (_: Throwable) {
+                val app = com.google.firebase.FirebaseApp.getInstance()
+                FirebaseDatabase.getInstance(app).reference
+            }
         }
-        q.addValueEventListener(l)
-        awaitClose { q.removeEventListener(l) }
-    }.catch { }
+    }
+
+    fun uid() = try { auth.currentUser?.uid ?: "" } catch (_: Throwable) { "" }
+
+    private fun <T> watch(q: Query, fallback: T? = null, parse: (DataSnapshot) -> T): Flow<T> = callbackFlow {
+        val l = object : ValueEventListener {
+            override fun onDataChange(s: DataSnapshot) {
+                try {
+                    trySend(parse(s))
+                } catch (e: Throwable) {
+                    if (fallback != null) trySend(fallback)
+                }
+            }
+            override fun onCancelled(e: DatabaseError) {
+                // Keep channel open, do not crash collector
+            }
+        }
+        try {
+            q.addValueEventListener(l)
+        } catch (_: Throwable) { }
+        awaitClose {
+            try { q.removeEventListener(l) } catch (_: Throwable) { }
+        }
+    }.catch {
+        if (fallback != null) emit(fallback)
+    }
 
     // ---------- Streams ----------
     fun appConfig() = watch(db.child("appConfig")) { s ->

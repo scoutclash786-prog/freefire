@@ -35,10 +35,10 @@ fun AppGate(content: @Composable () -> Unit) {
     var later by rememberSaveable { mutableStateOf(false) }
     when {
         cfg.maintenance -> InfoPage(Icons.Default.Construction, "We will be back soon", cfg.maintenanceMsg.ifBlank { "The app is under maintenance. Please try again in a little while." }, null, null)
-        cfg.minCode > code -> UpdatePage(cfg)
+        cfg.minCode > code && code > 0L -> UpdatePage(cfg)
         else -> {
             content()
-            if (cfg.latestCode > code && !later) UpdateDialog(cfg) { later = true }
+            if (cfg.latestCode > code && code > 0L && !later) UpdateDialog(cfg) { later = true }
         }
     }
 }

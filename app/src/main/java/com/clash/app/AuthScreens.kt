@@ -27,22 +27,42 @@ import kotlinx.coroutines.launch
 @Composable
 fun LanguageScreen(nav: NavController) {
     val ctx = LocalContext.current
-    Column(Modifier.fillMaxSize().statusBarsPadding()) {
-        Text(tr("choose_language"), Modifier.padding(20.dp), fontSize = 17.sp, fontWeight = FontWeight.Bold)
-        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    androidx.activity.compose.BackHandler {
+        try {
+            if (nav.previousBackStackEntry != null) nav.popBackStack()
+            else (ctx as? android.app.Activity)?.finish()
+        } catch (_: Throwable) {
+            (ctx as? android.app.Activity)?.finish()
+        }
+    }
+    Column(Modifier.fillMaxSize().background(Bg).statusBarsPadding().padding(horizontal = 16.dp, vertical = 12.dp)) {
+        Text(tr("choose_language"), Modifier.padding(vertical = 12.dp), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             AppLanguage.options.forEach { option ->
                 Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(if (AppLanguage.current == option.code) Field else CardC)
-                    .clickable { AppLanguage.select(ctx, option.code) }.padding(horizontal = 14.dp, vertical = 8.dp),
+                    .clickable { AppLanguage.select(ctx, option.code) }.padding(horizontal = 14.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(AppLanguage.current == option.code, { AppLanguage.select(ctx, option.code) })
                     Spacer(Modifier.width(12.dp))
-                    Column { Text(option.nativeName, fontSize = 16.sp, fontWeight = FontWeight.SemiBold); if (option.nativeName != option.label) Text(option.label, color = Color.Gray, fontSize = 11.sp) }
+                    Column {
+                        Text(option.nativeName, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
+                        if (option.nativeName != option.label) Text(option.label, color = Color.LightGray, fontSize = 12.sp)
+                    }
                 }
             }
         }
-        Spacer(Modifier.weight(1f))
-        Btn(tr("continue"), Modifier.fillMaxWidth().padding(16.dp)) {
-            if (Repo.auth.currentUser != null) nav.popBackStack() else nav.navigate("welcome")
+        Spacer(Modifier.height(16.dp))
+        Btn(tr("continue"), Modifier.fillMaxWidth().height(48.dp)) {
+            try {
+                val loggedIn = try { Repo.auth.currentUser != null } catch (_: Throwable) { false }
+                if (loggedIn) {
+                    if (!nav.popBackStack()) nav.navigate("main")
+                } else {
+                    nav.navigate("welcome")
+                }
+            } catch (_: Throwable) {
+                try { nav.navigate("welcome") } catch (_: Throwable) { }
+            }
         }
     }
 }

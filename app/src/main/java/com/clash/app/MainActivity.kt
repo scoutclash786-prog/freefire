@@ -15,18 +15,14 @@ import androidx.navigation.compose.rememberNavController
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            if (com.google.firebase.FirebaseApp.getApps(this).isEmpty()) {
-                com.google.firebase.FirebaseApp.initializeApp(this)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        try { initFirebase(this) } catch (_: Throwable) { }
         AppLanguage.load(this)
-        if (android.os.Build.VERSION.SDK_INT >= 26) {
-            val nm = getSystemService(android.app.NotificationManager::class.java)
-            nm.createNotificationChannel(android.app.NotificationChannel("clash_default", "EliteXarena", android.app.NotificationManager.IMPORTANCE_HIGH))
-        }
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= 26) {
+                val nm = getSystemService(android.app.NotificationManager::class.java)
+                nm?.createNotificationChannel(android.app.NotificationChannel("clash_default", "EliteXarena", android.app.NotificationManager.IMPORTANCE_HIGH))
+            }
+        } catch (_: Throwable) { }
         setContent {
             val direction = if (AppLanguage.isRtl) androidx.compose.ui.unit.LayoutDirection.Rtl else androidx.compose.ui.unit.LayoutDirection.Ltr
             androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalLayoutDirection provides direction) {

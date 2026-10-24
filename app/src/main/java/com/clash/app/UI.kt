@@ -130,7 +130,14 @@ fun Context.findActivity(): android.app.Activity? {
 
 @Composable
 fun <T> rflow(vararg k: Any?, init: T, f: () -> Flow<T>): State<T> {
-    val fl = remember(k.toList()) { f() }
+    val fl = remember(k.toList()) {
+        try {
+            f()
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            flowOf(init)
+        }
+    }
     return fl.collectAsState(init)
 }
 
@@ -173,15 +180,28 @@ fun SplashScreen(nav: NavController) {
     var bmp by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
     LaunchedEffect(Unit) {
         val t0 = System.currentTimeMillis()
-        ImgCache.warm(ctx)
-        try { ImgCache.loadSplash(ctx) { bmp = it } } catch (_: Exception) { }
+        try { ImgCache.warm(ctx) } catch (_: Throwable) { }
+        try { ImgCache.loadSplash(ctx) { bmp = it } } catch (_: Throwable) { }
         val left = 1500 - (System.currentTimeMillis() - t0)
         if (left > 0) delay(left)
         try {
-            val loggedIn = try { Repo.auth.currentUser != null } catch (_: Exception) { false }
-            nav.navigate(if (loggedIn) "main" else "lang") { popUpTo("splash") { inclusive = true } }
-        } catch (_: Exception) {
-            nav.navigate("lang") { popUpTo("splash") { inclusive = true } }
+            val loggedIn = try { Repo.auth.currentUser != null } catch (_: Throwable) { false }
+            val target = if (loggedIn) "main" else "lang"
+            try {
+                nav.navigate(target) {
+                    popUpTo("splash") { inclusive = true }
+                    launchSingleTop = true
+                }
+            } catch (_: Throwable) {
+                try {
+                    nav.navigate(target)
+                } catch (_: Throwable) {
+                    try { nav.navigate("welcome") } catch (_: Throwable) { }
+                }
+            }
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            try { nav.navigate("lang") } catch (_: Throwable) { }
         }
     }
     Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color(0xFF1B0640), Bg)))) {

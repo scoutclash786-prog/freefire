@@ -26,5 +26,13 @@ class ExampleRobolectricTest {
     val controller = Robolectric.buildActivity(MainActivity::class.java).setup()
     val activity = controller.get()
     org.junit.Assert.assertNotNull(activity)
+    org.robolectric.shadows.ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+  }
+
+  @Test
+  fun `launch AdminActivity without crash`() {
+    val controller = Robolectric.buildActivity(com.clash.admin.AdminActivity::class.java).setup()
+    val activity = controller.get()
+    org.junit.Assert.assertNotNull(activity)
   }
 }

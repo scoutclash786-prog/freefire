@@ -28,25 +28,49 @@ fun fdate(a: Any?): String = if (num(a) == 0.0) "-" else SimpleDateFormat("dd MM
 object AR {
     val auth: FirebaseAuth get() = try {
         FirebaseAuth.getInstance()
-    } catch (_: Exception) {
-        val app = com.google.firebase.FirebaseApp.getInstance()
+    } catch (_: Throwable) {
+        val app = com.clash.app.ClashApp.instance?.let { com.clash.app.initFirebase(it) }
+            ?: com.google.firebase.FirebaseApp.getInstance()
         FirebaseAuth.getInstance(app)
     }
+
     val db: DatabaseReference get() = try {
-        FirebaseDatabase.getInstance().reference
-    } catch (_: Exception) {
-        val app = com.google.firebase.FirebaseApp.getInstance()
-        FirebaseDatabase.getInstance(app).reference
+        FirebaseDatabase.getInstance("https://paynal-18aa1-default-rtdb.firebaseio.com").reference
+    } catch (_: Throwable) {
+        try {
+            val app = com.clash.app.ClashApp.instance?.let { com.clash.app.initFirebase(it) }
+                ?: com.google.firebase.FirebaseApp.getInstance()
+            FirebaseDatabase.getInstance(app, "https://paynal-18aa1-default-rtdb.firebaseio.com").reference
+        } catch (_: Throwable) {
+            try {
+                FirebaseDatabase.getInstance().reference
+            } catch (_: Throwable) {
+                val app = com.google.firebase.FirebaseApp.getInstance()
+                FirebaseDatabase.getInstance(app).reference
+            }
+        }
     }
 
     fun watchQ(q: Query): Flow<Map<String, Any?>> = callbackFlow {
         val l = object : ValueEventListener {
-            override fun onDataChange(s: DataSnapshot) { trySend(mp(s.value)) }
-            override fun onCancelled(e: DatabaseError) { close(e.toException()) }
+            override fun onDataChange(s: DataSnapshot) {
+                try {
+                    trySend(mp(s.value))
+                } catch (_: Throwable) {
+                    trySend(emptyMap())
+                }
+            }
+            override fun onCancelled(e: DatabaseError) {
+                // Keep channel open
+            }
         }
-        q.addValueEventListener(l)
-        awaitClose { q.removeEventListener(l) }
-    }.catch { }
+        try {
+            q.addValueEventListener(l)
+        } catch (_: Throwable) { }
+        awaitClose {
+            try { q.removeEventListener(l) } catch (_: Throwable) { }
+        }
+    }.catch { emit(emptyMap()) }
 
     fun watch(path: String) = watchQ(db.child(path))
     suspend fun get(path: String): Any? = db.child(path).get().await().value

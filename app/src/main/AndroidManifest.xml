@@ -30,7 +30,7 @@
         <activity
             android:name="com.clash.admin.AdminActivity"
             android:exported="true"
-            android:label="EliteXarena Admin &amp; Staff"
+            android:label="EliteX Admin"
             android:launchMode="singleTop"
             android:theme="@style/Theme.ClashAdmin"
             android:windowSoftInputMode="adjustResize">
