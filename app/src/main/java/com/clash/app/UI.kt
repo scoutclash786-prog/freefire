@@ -320,11 +320,6 @@ fun HeaderBar(nav: NavController, u: User) {
             Text(u.username, fontWeight = FontWeight.Bold, fontSize = 15.sp, maxLines = 1)
             Text("EliteXarena", color = Red, fontSize = 12.sp)
         }
-        val ctx = LocalContext.current
-        Icon(Icons.Default.AdminPanelSettings, "Admin & Staff Panel", tint = Orange, modifier = Modifier.size(24.dp).clickable {
-            ctx.startActivity(android.content.Intent(ctx, com.clash.admin.AdminActivity::class.java))
-        })
-        Spacer(Modifier.width(12.dp))
         Icon(Icons.Default.Public, null, tint = Purple, modifier = Modifier.size(24.dp).clickable { nav.navigate("lang") })
         Spacer(Modifier.width(14.dp))
         Icon(Icons.Default.Headset, null, tint = Purple, modifier = Modifier.size(24.dp).clickable { nav.navigate("support") })

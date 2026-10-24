@@ -2,7 +2,6 @@ package com.clash.app
 
 import android.content.Intent
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -146,24 +145,6 @@ fun LoginScreen(nav: NavController) {
         Row(Modifier.align(Alignment.CenterHorizontally)) {
             Text("Don't have an account? ")
             Text("Sign Up", fontWeight = FontWeight.Bold, modifier = Modifier.clickable { nav.navigate("signup") })
-        }
-        Spacer(Modifier.height(28.dp))
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(CardC)
-                .clickable {
-                    val intent = Intent(ctx, com.clash.admin.AdminActivity::class.java)
-                    ctx.startActivity(intent)
-                }
-                .padding(vertical = 12.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(Icons.Default.AdminPanelSettings, null, tint = Orange, modifier = Modifier.size(20.dp))
-            Spacer(Modifier.width(8.dp))
-            Text("Admin & Staff Panel Portal", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = Orange)
         }
     }
 }

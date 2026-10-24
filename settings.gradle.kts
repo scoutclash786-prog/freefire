@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "EliteXarena"
 
-include(":app")
+include(":app", ":admin")

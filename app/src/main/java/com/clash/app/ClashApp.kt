@@ -43,7 +43,6 @@ class ClashApp : Application(), ImageLoaderFactory {
         } catch (_: Throwable) {
             try { FirebaseDatabase.getInstance().setPersistenceEnabled(true) } catch (_: Throwable) { }
         }
-        try { com.clash.admin.AdminPush.ensureChannel(this) } catch (_: Throwable) { }
     }
 
     override fun newImageLoader(): ImageLoader = ImageLoader.Builder(this)

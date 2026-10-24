@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.ClashAdmin" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#FF10002B</item>
+        <item name="android:navigationBarColor">#FF10002B</item>
+    </style>
+</resources>

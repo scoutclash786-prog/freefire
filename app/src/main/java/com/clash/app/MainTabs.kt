@@ -342,11 +342,6 @@ fun AccountTab(nav: NavController, u: User) {
         }
         MenuRow(Icons.Default.Description, tr("terms")) { nav.navigate("info/terms/Terms and Conditions") }
         MenuRow(Icons.Default.Language, tr("change_language")) { nav.navigate("lang") }
-        MenuRow(Icons.Default.AdminPanelSettings, "Admin & Staff Panel", trailing = {
-            Text("OPEN", color = Orange, fontWeight = FontWeight.Bold, fontSize = 12.sp)
-        }) {
-            ctx.startActivity(Intent(ctx, com.clash.admin.AdminActivity::class.java))
-        }
         MenuRow(Icons.Default.PowerSettingsNew, tr("logout")) { Repo.auth.signOut(); nav.navigate("login") { popUpTo(0) } }
         Text("Version : 1.0", Modifier.fillMaxWidth().padding(20.dp), textAlign = TextAlign.Center, fontSize = 13.sp)
     }

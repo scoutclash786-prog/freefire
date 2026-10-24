@@ -26,30 +26,8 @@
             </intent-filter>
         </activity>
 
-        <!-- Admin & Staff Panel Activity -->
-        <activity
-            android:name="com.clash.admin.AdminActivity"
-            android:exported="true"
-            android:label="EliteX Admin"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.ClashAdmin"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
         <service
             android:name="com.clash.app.ClashMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name="com.clash.admin.AdminMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
