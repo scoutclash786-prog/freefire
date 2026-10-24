@@ -88,11 +88,25 @@ val Coin = Color(0xFFFFA000)
 
 @Composable
 fun ClashTheme(content: @Composable () -> Unit) {
-    var uid by remember { mutableStateOf(Repo.uid()) }
+    val ctx = LocalContext.current
+    LaunchedEffect(Unit) {
+        try {
+            if (com.google.firebase.FirebaseApp.getApps(ctx).isEmpty()) {
+                com.google.firebase.FirebaseApp.initializeApp(ctx)
+            }
+        } catch (_: Exception) { }
+    }
+    var uid by remember { mutableStateOf(try { Repo.uid() } catch (_: Exception) { "" }) }
     DisposableEffect(Unit) {
         val listener = FirebaseAuth.AuthStateListener { uid = it.currentUser?.uid.orEmpty() }
-        Repo.auth.addAuthStateListener(listener)
-        onDispose { Repo.auth.removeAuthStateListener(listener) }
+        try {
+            Repo.auth.addAuthStateListener(listener)
+        } catch (_: Exception) { }
+        onDispose {
+            try {
+                Repo.auth.removeAuthStateListener(listener)
+            } catch (_: Exception) { }
+        }
     }
     val personalTheme by rflow(uid, init = "") { if (uid.isBlank()) flowOf("") else Repo.playerTheme(uid) }
     val appSettings by rflow(init = emptyMap<String, Any?>()) { Repo.settings() }
@@ -163,7 +177,12 @@ fun SplashScreen(nav: NavController) {
         try { ImgCache.loadSplash(ctx) { bmp = it } } catch (_: Exception) { }
         val left = 1500 - (System.currentTimeMillis() - t0)
         if (left > 0) delay(left)
-        nav.navigate(if (Repo.auth.currentUser != null) "main" else "lang") { popUpTo("splash") { inclusive = true } }
+        try {
+            val loggedIn = try { Repo.auth.currentUser != null } catch (_: Exception) { false }
+            nav.navigate(if (loggedIn) "main" else "lang") { popUpTo("splash") { inclusive = true } }
+        } catch (_: Exception) {
+            nav.navigate("lang") { popUpTo("splash") { inclusive = true } }
+        }
     }
     Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color(0xFF1B0640), Bg)))) {
         val shown = bmp

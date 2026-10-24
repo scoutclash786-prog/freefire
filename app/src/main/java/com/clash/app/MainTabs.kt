@@ -340,7 +340,7 @@ fun AccountTab(nav: NavController, u: User) {
             ctx.startActivity(Intent(ctx, com.clash.admin.AdminActivity::class.java))
         }
         MenuRow(Icons.Default.PowerSettingsNew, tr("logout")) { Repo.auth.signOut(); nav.navigate("login") { popUpTo(0) } }
-        Text("Version : 1.2", Modifier.fillMaxWidth().padding(20.dp), textAlign = TextAlign.Center, fontSize = 13.sp)
+        Text("Version : 1.0", Modifier.fillMaxWidth().padding(20.dp), textAlign = TextAlign.Center, fontSize = 13.sp)
     }
 }
 

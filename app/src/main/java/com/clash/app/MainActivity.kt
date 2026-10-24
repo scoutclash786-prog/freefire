@@ -15,6 +15,13 @@ import androidx.navigation.compose.rememberNavController
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        try {
+            if (com.google.firebase.FirebaseApp.getApps(this).isEmpty()) {
+                com.google.firebase.FirebaseApp.initializeApp(this)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         AppLanguage.load(this)
         if (android.os.Build.VERSION.SDK_INT >= 26) {
             val nm = getSystemService(android.app.NotificationManager::class.java)

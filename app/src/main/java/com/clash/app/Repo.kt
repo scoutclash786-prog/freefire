@@ -22,9 +22,19 @@ import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 
 object Repo {
-    val auth: FirebaseAuth get() = FirebaseAuth.getInstance()
-    val db: DatabaseReference get() = FirebaseDatabase.getInstance().reference
-    fun uid() = auth.currentUser?.uid ?: ""
+    val auth: FirebaseAuth get() = try {
+        FirebaseAuth.getInstance()
+    } catch (_: Exception) {
+        val app = com.google.firebase.FirebaseApp.getInstance()
+        FirebaseAuth.getInstance(app)
+    }
+    val db: DatabaseReference get() = try {
+        FirebaseDatabase.getInstance().reference
+    } catch (_: Exception) {
+        val app = com.google.firebase.FirebaseApp.getInstance()
+        FirebaseDatabase.getInstance(app).reference
+    }
+    fun uid() = try { auth.currentUser?.uid ?: "" } catch (_: Exception) { "" }
 
     private fun <T> watch(q: Query, parse: (DataSnapshot) -> T): Flow<T> = callbackFlow {
         val l = object : ValueEventListener {

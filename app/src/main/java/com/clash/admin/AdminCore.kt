@@ -26,8 +26,18 @@ fun money(d: Double): String = if (d % 1.0 == 0.0) d.toLong().toString() else "%
 fun fdate(a: Any?): String = if (num(a) == 0.0) "-" else SimpleDateFormat("dd MMM, hh:mm a", Locale.getDefault()).format(Date(num(a).toLong()))
 
 object AR {
-    val auth: FirebaseAuth get() = FirebaseAuth.getInstance()
-    val db: DatabaseReference get() = FirebaseDatabase.getInstance().reference
+    val auth: FirebaseAuth get() = try {
+        FirebaseAuth.getInstance()
+    } catch (_: Exception) {
+        val app = com.google.firebase.FirebaseApp.getInstance()
+        FirebaseAuth.getInstance(app)
+    }
+    val db: DatabaseReference get() = try {
+        FirebaseDatabase.getInstance().reference
+    } catch (_: Exception) {
+        val app = com.google.firebase.FirebaseApp.getInstance()
+        FirebaseDatabase.getInstance(app).reference
+    }
 
     fun watchQ(q: Query): Flow<Map<String, Any?>> = callbackFlow {
         val l = object : ValueEventListener {

@@ -8,11 +8,19 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
+import com.google.firebase.FirebaseApp
 import com.google.firebase.database.FirebaseDatabase
 
 class ClashApp : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
+        try {
+            if (FirebaseApp.getApps(this).isEmpty()) {
+                FirebaseApp.initializeApp(this)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         // keep settings/banners on the phone so they show instantly on next start
         try { FirebaseDatabase.getInstance().setPersistenceEnabled(true) } catch (_: Exception) { }
         try { com.clash.admin.AdminPush.ensureChannel(this) } catch (_: Exception) { }
