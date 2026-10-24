@@ -1,0 +1,6 @@
+{
+  "name": "EliteXarena",
+  "description": "EliteXarena esports tournament platform with Player User Panel, Staff Operations Panel, and Master Admin Panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

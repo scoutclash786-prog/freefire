@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Clash" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#10002B</item>
+        <item name="android:navigationBarColor">#1A0536</item>
+        <item name="android:windowBackground">#10002B</item>
+    </style>
+    <style name="Theme.ClashAdmin" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#10002B</item>
+        <item name="android:navigationBarColor">#1A0536</item>
+        <item name="android:windowBackground">#10002B</item>
+    </style>
+</resources>

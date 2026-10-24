@@ -1,0 +1,308 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      ".read": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_view').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_export').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('dashboard_view').val()===true))",
+      ".indexOn": [
+        "createdAt",
+        "role",
+        "username"
+      ],
+      "$uid": {
+        ".read": "auth!=null && (auth.uid===$uid || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_view').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_export').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('dashboard_view').val()===true)))",
+        ".write": "auth!=null && ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (!data.exists() && auth.uid===$uid))",
+        "role": {
+          ".write": "auth!=null && ((root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth.uid===$uid && (root.child('system').child('bootstrapped').val()!==true && root.child('adminSignups').child($uid).exists())))",
+          ".validate": "newData.val()==='user' || (root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth.uid===$uid && newData.val()==='admin' && (root.child('system').child('bootstrapped').val()!==true && root.child('adminSignups').child($uid).exists()))"
+        },
+        "deposited": {
+          ".write": "(auth!=null && auth.uid===$uid && newData.val() <= data.val()) || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('balance_adjust').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_reward').val()===true))",
+          ".validate": "newData.isNumber() && ((((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('balance_adjust').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_reward').val()===true))) || newData.val()===0 || (auth!=null && auth.uid===$uid && newData.val() <= data.val()))"
+        },
+        "winning": {
+          ".write": "(auth!=null && auth.uid===$uid && newData.val() <= data.val()) || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('balance_adjust').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('withdrawals_review').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))",
+          ".validate": "newData.isNumber() && ((((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('balance_adjust').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('withdrawals_review').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))) || newData.val()===0 || (auth!=null && auth.uid===$uid && newData.val() <= data.val()))"
+        },
+        "earnings": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))"
+        },
+        "wins": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))"
+        },
+        "kills": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))"
+        },
+        "matchesPlayed": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))"
+        },
+        "payouts": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('withdrawals_review').val()===true))"
+        },
+        "banned": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_moderate').val()===true))"
+        },
+        "kyc": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_moderate').val()===true))"
+        },
+        "referralEarnings": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('balance_adjust').val()===true))"
+        },
+        "firstName": {
+          ".write": "auth!=null && auth.uid===$uid"
+        },
+        "lastName": {
+          ".write": "auth!=null && auth.uid===$uid"
+        },
+        "dob": {
+          ".write": "auth!=null && auth.uid===$uid"
+        },
+        "gender": {
+          ".write": "auth!=null && auth.uid===$uid"
+        },
+        "pushEnabled": {
+          ".write": "auth!=null && auth.uid===$uid"
+        },
+        "avatar": {
+          ".write": "auth!=null && auth.uid===$uid"
+        },
+        "$other": {
+          ".validate": true
+        },
+        "fcmToken": {
+          ".write": "auth!=null && auth.uid===$uid"
+        },
+        "theme": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_theme').val()===true))"
+        },
+        "staffPermissions": {
+          ".write": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()",
+          ".validate": "newData.hasChildren()",
+          "$permission": {
+            ".validate": "newData.isBoolean()"
+          }
+        },
+        "banReason": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_moderate').val()===true))"
+        }
+      }
+    },
+    "adminSignups": {
+      ".read": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()",
+      "$uid": {
+        ".write": "auth!=null && ((auth.uid===$uid && !data.exists() && newData.child('key').isString() && ((!root.child('adminConfig').child('signupKey').exists() && newData.child('key').val()==='047128725336') || newData.child('key').val()===root.child('adminConfig').child('signupKey').val())) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()))"
+      }
+    },
+    "adminConfig": {
+      ".read": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()",
+      ".write": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()"
+    },
+    "system": {
+      "bootstrapped": {
+        ".write": "auth!=null && !data.exists() && newData.val()===true && root.child('adminSignups').child(auth.uid).exists()"
+      }
+    },
+    "panelInvites": {
+      ".read": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()",
+      "$uid": {
+        ".write": "(auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && auth.uid===$uid && root.child('system').child('bootstrapped').val()!==true && root.child('adminSignups').child($uid).exists())",
+        "key": {
+          ".validate": "newData.isString() && newData.val().matches(/^[0-9]{12}$/)"
+        },
+        "role": {
+          ".validate": "newData.val()==='staff' || newData.val()==='admin'"
+        }
+      }
+    },
+    "panelLogin": {
+      "$uid": {
+        ".read": "auth!=null && (auth.uid===$uid || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()))",
+        ".write": "auth!=null && ((auth.uid===$uid && (!newData.exists() || (newData.child('key').isString() && newData.child('key').val()===root.child('panelInvites').child($uid).child('key').val()))) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()))"
+      }
+    },
+    "loginMap": {
+      ".read": true,
+      "$k": {
+        ".write": "auth!=null && (!data.exists() || (root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()))",
+        ".validate": "newData.isString()"
+      }
+    },
+    "referralCodes": {
+      ".read": true,
+      "$k": {
+        ".write": "auth!=null && (!data.exists() || (root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()))"
+      }
+    },
+    "referrals": {
+      "$ref": {
+        ".read": "auth!=null && (auth.uid===$ref || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_view').val()===true)))",
+        "$uid": {
+          ".write": "auth!=null && ((auth.uid===$uid && !data.exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()))"
+        }
+      }
+    },
+    "rewards": {
+      "$uid": {
+        ".read": "auth!=null && (auth.uid===$uid || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_view').val()===true)))",
+        ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_reward').val()===true))"
+      }
+    },
+    "games": {
+      ".read": true,
+      ".write": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()",
+      "$id": {
+        ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('games_manage').val()===true && newData.exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('games_delete').val()===true && !newData.exists()))"
+      }
+    },
+    "banners": {
+      ".read": true,
+      ".write": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()",
+      "$id": {
+        ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('banners_manage').val()===true && newData.exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('banners_delete').val()===true && !newData.exists()))"
+      }
+    },
+    "settings": {
+      ".read": true,
+      ".write": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()",
+      "$key": {
+        ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('settings_manage').val()===true))"
+      }
+    },
+    "announcements": {
+      ".read": true,
+      ".write": "auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()",
+      "$id": {
+        ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('announcements_manage').val()===true && newData.exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('announcements_delete').val()===true && !newData.exists()))"
+      }
+    },
+    "matches": {
+      ".read": true,
+      ".indexOn": [
+        "gameId",
+        "status"
+      ],
+      "$mid": {
+        ".write": "(auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('matches_manage').val()===true && newData.exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('matches_delete').val()===true && !newData.exists())",
+        "slots": {
+          "$s": {
+            ".write": "auth!=null && ((!data.exists() && newData.child('uid').val()===auth.uid) || (data.child('uid').val()===auth.uid && !newData.exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('matches_manage').val()===true)"
+          }
+        },
+        "joined": {
+          ".write": "auth!=null && ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('matches_manage').val()===true || !data.exists() || newData.val() >= data.val())"
+        },
+        "results": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))"
+        },
+        "resultDeclared": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))"
+        },
+        "status": {
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('matches_manage').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true))"
+        }
+      }
+    },
+    "rooms": {
+      "$mid": {
+        ".read": "auth!=null && ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('matches_manage').val()===true || root.child('joinedByUser').child(auth.uid).child($mid).exists())",
+        ".write": "(auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('matches_manage').val()===true && newData.exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('matches_delete').val()===true && !newData.exists())"
+      }
+    },
+    "joinedByUser": {
+      "$uid": {
+        ".read": "auth!=null && (auth.uid===$uid || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_view').val()===true)))",
+        ".write": "auth!=null && auth.uid===$uid"
+      }
+    },
+    "transactions": {
+      "$uid": {
+        ".indexOn": [
+          "ts"
+        ],
+        ".read": "auth!=null && (auth.uid===$uid || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('transactions_view').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_view').val()===true)))",
+        ".write": "auth!=null && (auth.uid===$uid || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('balance_adjust').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('withdrawals_review').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('players_reward').val()===true)))"
+      }
+    },
+    "deposits": {
+      ".read": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('dashboard_view').val()===true))",
+      "$id": {
+        ".write": false
+      }
+    },
+    "withdrawals": {
+      ".read": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('withdrawals_review').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('withdrawals_export').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('dashboard_view').val()===true))",
+      "$id": {
+        ".write": "auth!=null && ((!data.exists() && newData.child('uid').val()===auth.uid && newData.child('status').val()==='pending') || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('withdrawals_review').val()===true)"
+      }
+    },
+    "leaderboard": {
+      ".read": true,
+      ".indexOn": [
+        "weekly",
+        "monthly",
+        "total"
+      ],
+      ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('results_manage').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('ranking_reset').val()===true) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('leaderboard_manage').val()===true))"
+    },
+    "appConfig": {
+      ".read": true,
+      ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('app_control').val()===true))"
+    },
+    "adminLogs": {
+      ".read": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('activity_view').val()===true))",
+      ".indexOn": [
+        "ts"
+      ],
+      "$id": {
+        ".write": "auth!=null && !data.exists() && ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists()))"
+      }
+    },
+    "leaderboardConfig": {
+      ".read": true,
+      ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('leaderboard_manage').val()===true))",
+      "auto": {
+        ".validate": "newData.isBoolean()"
+      }
+    },
+    "adminNotificationTokens": {
+      "$uid": {
+        ".read": "auth!=null && auth.uid===$uid && ((root.child('users').child(auth.uid).child('role').val()==='admin' || root.child('users').child(auth.uid).child('role').val()==='staff') && root.child('panelLogin').child(auth.uid).exists())",
+        "$tokenHash": {
+          ".write": "auth!=null && auth.uid===$uid && ((root.child('users').child(auth.uid).child('role').val()==='admin' || root.child('users').child(auth.uid).child('role').val()==='staff') && root.child('panelLogin').child(auth.uid).exists())",
+          ".validate": "newData.hasChildren(['token','updatedAt']) && newData.child('token').isString() && newData.child('token').val().length<=4096 && newData.child('updatedAt').isNumber()"
+        }
+      }
+    },
+    "supportTickets": {
+      ".read": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true))",
+      ".write": false,
+      "$uid": {
+        ".read": "(auth!=null && auth.uid===$uid || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)))",
+        "$ticketId": {
+          ".read": "(auth!=null && auth.uid===$uid || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)))",
+          ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) || (auth!=null && auth.uid===$uid && !data.exists() && newData.child('uid').val()===$uid && newData.child('username').val()===root.child('users').child(auth.uid).child('username').val() && newData.child('status').val()==='open' && newData.child('messages').hasChildren())",
+          ".validate": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) || (newData.child('uid').val()===$uid && newData.child('username').val()===root.child('users').child(auth.uid).child('username').val() && newData.child('subject').isString() && newData.child('category').isString() && (newData.child('status').val()==='open' || newData.child('status').val()==='in_progress' || newData.child('status').val()==='resolved' || newData.child('status').val()==='closed') && newData.child('createdAt').isNumber() && newData.child('updatedAt').isNumber() && newData.child('messages').hasChildren())",
+          "lastMessage": {
+            ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) || (auth!=null && auth.uid===$uid && root.child('supportTickets').child($uid).child($ticketId).child('status').val()!=='closed')"
+          },
+          "updatedAt": {
+            ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) || (auth!=null && auth.uid===$uid && root.child('supportTickets').child($uid).child($ticketId).child('status').val()!=='closed')"
+          },
+          "status": {
+            ".write": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) || (auth!=null && auth.uid===$uid && data.val()==='resolved' && newData.val()==='open')"
+          },
+          "messages": {
+            ".read": "(auth!=null && auth.uid===$uid || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)))",
+            "$messageId": {
+              ".write": "!data.exists() && auth!=null && newData.child('senderUid').val()===auth.uid && (auth.uid===$uid && newData.child('senderRole').val()==='user' || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) && newData.child('senderRole').val()===root.child('users').child(auth.uid).child('role').val()) && (((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) || root.child('supportTickets').child($uid).child($ticketId).child('status').val()!=='closed')",
+              ".validate": "newData.hasChildren(['senderUid','senderName','senderRole','body','createdAt']) && newData.child('senderUid').val()===auth.uid && newData.child('senderName').isString() && newData.child('body').isString() && newData.child('createdAt').isNumber() && (auth.uid===$uid && newData.child('senderRole').val()==='user' || ((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) && newData.child('senderRole').val()===root.child('users').child(auth.uid).child('role').val())"
+            }
+          },
+          "$other": {
+            ".validate": "((auth!=null && root.child('users').child(auth.uid).child('role').val()==='admin' && root.child('panelLogin').child(auth.uid).exists()) || (auth!=null && root.child('users').child(auth.uid).child('role').val()==='staff' && root.child('panelLogin').child(auth.uid).exists() && root.child('users').child(auth.uid).child('staffPermissions').child('support_manage').val()===true)) || ($other==='uid' || $other==='username' || $other==='subject' || $other==='category' || $other==='status' || $other==='createdAt' || $other==='updatedAt' || $other==='lastMessage' || $other==='messages')"
+          }
+        }
+      }
+    }
+  }
+}
